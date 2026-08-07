@@ -13,14 +13,10 @@
     </appender>
 
     <!-- Rolling file output -->
-    <appender name="FILE"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/app.log</file>
-
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-
             <fileNamePattern>${LOG_PATH}/app.%i.log.zip</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>3</maxIndex>
@@ -28,7 +24,6 @@
 
         <triggeringPolicy
                 class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-
             <maxFileSize>5KB</maxFileSize>
         </triggeringPolicy>
 
