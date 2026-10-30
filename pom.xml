@@ -68,6 +68,7 @@
                         </executions>
                     </plugin>
                 </plugins>
+                <finalName>fat-jar</finalName>
             </build>
         </profile>
         <profile>
@@ -78,7 +79,6 @@
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <version>3.8.0</version>
-
                         <configuration>
                             <archive>
                                 <manifest>
@@ -103,7 +103,8 @@
                         </executions>
                     </plugin>
                 </plugins>
+                <finalName>thin-jar</finalName>
             </build>
-        </profile>
+        </profile>f
     </profiles>
 </project>

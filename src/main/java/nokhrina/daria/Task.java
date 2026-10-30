@@ -25,8 +25,7 @@ public class Task {
     void runTask() throws IOException {
         logger.debug("Task is started!");
         Message message = createMessageInstance(PROPERTY_FILE_NAME, PROPERTY_USERNAME_FIELD_IS_CALLED);
-        String outputMode = getOutputMode(SYSTEM_PROPERTY_NAME);
-        writeMessage(outputMode, message, OUTPUT_FILE_NAME);
+        writeMessage(message);
         logger.debug("Task is finished!");
     }
 
@@ -36,35 +35,23 @@ public class Task {
         String message = propertyReader.getFromFile(propertiesFileName, propertiesFieldName);
         if (message == null)  throw new NullPointerException("username==null");
         test.setMessage("Привіт " + message);
-        logger.debug("Test class is ready to be written: \"{}\"", message);
+        logger.debug("Test class is ready to be written: \"{}\"", test.getMessage());
         return test;
     }
 
-    private String getOutputMode(String propertyName){
+    private ObjectMapper getMapperByMode(String propertyName) throws IOException{
         String mode = propertyReader.getSystem(propertyName);
 
-        //todo: move to separate method in reader??
         if (mode == null) throw new NullPointerException("mode==null");
-
         logger.debug("Mode is loaded. Mode = {}", mode);
-        return mode;
+
+        if (mode.equalsIgnoreCase("json")) return new ObjectMapper();
+        else if (mode.equalsIgnoreCase("xml")) return new XmlMapper();
+        else throw new InvalidPropertiesFormatException("Unknown mode: " + mode);
     }
 
-    private void writeMessage(String outputMode, Message classMessage, String fileName) throws IOException {
-        ObjectMapper objectMapper;
-
-        if (outputMode.equalsIgnoreCase("json")) {
-            objectMapper = new ObjectMapper();
-        } else if (outputMode.equalsIgnoreCase("xml")) {
-            objectMapper = new XmlMapper();
-        } else {
-            throw new InvalidPropertiesFormatException("Unknown mode: " + outputMode);
-        }
-        fileName += "." + outputMode;
-
-        String message = objectMapper.writeValueAsString(classMessage);
-        objectMapper.writeValue(new FileOutputStream(fileName), message);
-
-        logger.debug("Message: \"{}\" was written to {}", message, fileName);
+    private void writeMessage(Message classMessage) throws IOException {
+        ObjectMapper objectMapper = getMapperByMode(SYSTEM_PROPERTY_NAME);
+        System.out.println(objectMapper.writeValueAsString(classMessage));
     }
 }
