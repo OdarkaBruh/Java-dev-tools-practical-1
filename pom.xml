@@ -105,6 +105,6 @@
                 </plugins>
                 <finalName>thin-jar</finalName>
             </build>
-        </profile>f
+        </profile>
     </profiles>
 </project>
